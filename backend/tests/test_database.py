@@ -12,9 +12,9 @@ class TestBase:
     def test_base_has_metadata(self) -> None:
         assert isinstance(Base.metadata, MetaData)
 
-    def test_base_metadata_is_empty(self) -> None:
-        """No domain tables should exist in Phase 1."""
-        assert len(Base.metadata.tables) == 0
+    def test_base_has_domain_models(self) -> None:
+        """Phase 2 models should be registered with the Base metadata."""
+        assert len(Base.metadata.tables) >= 13
 
 
 class TestGetDb:
