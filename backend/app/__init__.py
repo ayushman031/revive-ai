@@ -1,0 +1,1 @@
+"""REVIVE backend application package."""
