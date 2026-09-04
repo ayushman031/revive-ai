@@ -35,4 +35,5 @@ class Diagnosis(Base):
 
     recovery_case: Mapped["RecoveryCase"] = relationship(back_populates="diagnoses")
     payment_attempt: Mapped["PaymentAttempt"] = relationship(back_populates="diagnosis")
+    policy_decisions: Mapped[list["PolicyDecision"]] = relationship(back_populates="diagnosis")
 

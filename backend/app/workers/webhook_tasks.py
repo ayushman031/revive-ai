@@ -53,6 +53,7 @@ def process_webhook_event(self, event_id_str: str) -> None:
         
         # Step 2: Process the event
         error_msg = None
+        action_id = None
         handler = WEBHOOK_HANDLERS.get(event_type)
         
         if handler:
@@ -60,10 +61,11 @@ def process_webhook_event(self, event_id_str: str) -> None:
                 # We fetch the event again within a new transaction for the handler to use
                 with session.begin():
                     current_event = repo.get_event_by_id(event_id)
-                    handler(current_event, session=session)
+                    action_id = handler(current_event, session=session)
             except Exception as e:
                 logger.exception(f"Error executing handler for event {event_id}")
                 error_msg = str(e)
+                action_id = None
 
         else:
             logger.warning(f"No handler registered for event type {event_type}")
@@ -82,3 +84,9 @@ def process_webhook_event(self, event_id_str: str) -> None:
                 event.processed_at = datetime.now(timezone.utc)
                 
         logger.info(f"Worker completed event {event_id} with status {final_status.value}")
+
+        # Step 4: Enqueue downstream execution if a recovery action was created
+        # We do this OUTSIDE the database transaction so the task only runs after commit.
+        if action_id:
+            from app.workers.execution_tasks import execute_recovery_action_task
+            execute_recovery_action_task.delay(str(action_id))

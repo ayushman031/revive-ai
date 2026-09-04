@@ -18,7 +18,8 @@ class PolicyDecision(Base):
         server_default=text("gen_random_uuid()"),
     )
     recovery_case_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("recovery_cases.id"))
-    recommendation_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("recommendations.id"))
+    diagnosis_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("diagnoses.id"), index=True)
+    recommendation_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("recommendations.id"))
     policy_version: Mapped[str] = mapped_column(String(32))
     evaluated_intervention: Mapped[str] = mapped_column(String(64))
     decision: Mapped[str] = mapped_column(String(32))
@@ -28,7 +29,8 @@ class PolicyDecision(Base):
         server_default=text("NOW()"),
     )
 
-    recommendation: Mapped["Recommendation"] = relationship(back_populates="policy_decisions")
+    recommendation: Mapped["Recommendation | None"] = relationship(back_populates="policy_decisions")
+    diagnosis: Mapped["Diagnosis"] = relationship(back_populates="policy_decisions")
     recovery_actions: Mapped[list["RecoveryAction"]] = relationship(back_populates="policy_decision")
 
     __table_args__ = (
