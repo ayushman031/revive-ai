@@ -60,10 +60,11 @@ def process_webhook_event(self, event_id_str: str) -> None:
                 # We fetch the event again within a new transaction for the handler to use
                 with session.begin():
                     current_event = repo.get_event_by_id(event_id)
-                    handler(current_event)
+                    handler(current_event, session=session)
             except Exception as e:
                 logger.exception(f"Error executing handler for event {event_id}")
                 error_msg = str(e)
+
         else:
             logger.warning(f"No handler registered for event type {event_type}")
 

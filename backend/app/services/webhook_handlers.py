@@ -4,26 +4,27 @@ import logging
 from typing import Any
 
 from app.models.webhook_event import WebhookEvent
+from app.services.diagnosis_service import process_payment_failed_diagnosis
 
 logger = logging.getLogger(__name__)
 
 
-def handle_payment_failed(event: WebhookEvent) -> None:
-    """Handle payment.failed events."""
-    # Phase 3 stub: Just acknowledge safely.
-    logger.info(f"Safely processed payment.failed event: {event.event_id}")
+def handle_payment_failed(event: WebhookEvent, session: Any = None) -> None:
+    """Handle payment.failed events by running the deterministic diagnosis pipeline."""
+    logger.info(f"Processing payment.failed event: {event.event_id}")
+    if session and event.payload:
+        process_payment_failed_diagnosis(session, event.payload)
 
 
-def handle_payment_captured(event: WebhookEvent) -> None:
+def handle_payment_captured(event: WebhookEvent, session: Any = None) -> None:
     """Handle payment.captured events."""
-    # Phase 3 stub: Just acknowledge safely.
     logger.info(f"Safely processed payment.captured event: {event.event_id}")
 
 
-def handle_order_paid(event: WebhookEvent) -> None:
+def handle_order_paid(event: WebhookEvent, session: Any = None) -> None:
     """Handle order.paid events."""
-    # Phase 3 stub: Just acknowledge safely.
     logger.info(f"Safely processed order.paid event: {event.event_id}")
+
 
 
 # Dispatch map for supported events

@@ -3,9 +3,10 @@
 import os
 
 os.environ.setdefault(
-    "DATABASE_URL", "postgresql+psycopg://revive:change-me-for-local-development@localhost:5432/revive"
+    "DATABASE_URL", "postgresql+psycopg://revive:change-me-for-local-development@localhost:5432/revive_test"
 )
 os.environ.setdefault("REDIS_URL", "redis://localhost:6379/15")
+
 
 import pytest
 from fastapi.testclient import TestClient

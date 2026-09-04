@@ -30,7 +30,9 @@ class PaymentAttempt(Base):
     attempted_at: Mapped[datetime]
 
     payment: Mapped["Payment"] = relationship(back_populates="attempts")
+    diagnosis: Mapped["Diagnosis | None"] = relationship(back_populates="payment_attempt", uselist=False)
 
     __table_args__ = (
         Index("ix_payment_attempts_payment_attempt_number", "payment_id", "attempt_number"),
     )
+
