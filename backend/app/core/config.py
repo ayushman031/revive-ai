@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     database_url: str
     redis_url: str
     cors_origins: str = "http://localhost:3000"
+    razorpay_webhook_secret: str
 
     @property
     def cors_origin_list(self) -> list[str]:
