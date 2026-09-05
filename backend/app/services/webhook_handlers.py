@@ -69,11 +69,16 @@ def handle_payment_failed(event: WebhookEvent, session: Any = None) -> uuid.UUID
 def handle_payment_captured(event: WebhookEvent, session: Any = None) -> None:
     """Handle payment.captured events."""
     logger.info(f"Safely processed payment.captured event: {event.event_id}")
-
+    if session:
+        from app.services.measurement_service import MeasurementService
+        MeasurementService.process_success_event(session, event)
 
 def handle_order_paid(event: WebhookEvent, session: Any = None) -> None:
     """Handle order.paid events."""
     logger.info(f"Safely processed order.paid event: {event.event_id}")
+    if session:
+        from app.services.measurement_service import MeasurementService
+        MeasurementService.process_success_event(session, event)
 
 
 
