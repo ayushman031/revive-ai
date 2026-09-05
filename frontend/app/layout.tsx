@@ -1,17 +1,25 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
-
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { DashboardShell } from "./components/DashboardShell";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "REVIVE",
-  description: "REVIVE development application shell",
+  title: "REVIVE Merchant Dashboard",
+  description: "AI Revenue Recovery Agent Dashboard",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={inter.className}>
+        <DashboardShell>{children}</DashboardShell>
+      </body>
     </html>
   );
 }

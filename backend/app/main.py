@@ -5,6 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes.health import router as health_router
 from app.api.routes.webhooks import router as webhooks_router
+from app.api.routes.dashboard import router as dashboard_router
+from app.api.routes.cases import router as cases_router
 from app.core.config import get_settings
 
 
@@ -30,6 +32,8 @@ def create_app() -> FastAPI:
     )
     application.include_router(health_router)
     application.include_router(webhooks_router)
+    application.include_router(dashboard_router)
+    application.include_router(cases_router)
     return application
 
 
