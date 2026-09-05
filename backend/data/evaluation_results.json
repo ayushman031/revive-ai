@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "dataset_size": 10000,
+    "revenue_at_risk": 8043415400,
+    "assumptions": {
+      "costs": {
+        "retry": 0,
+        "link": 10,
+        "nudge": 2
+      },
+      "latency_minutes": {
+        "retry": 1,
+        "link": 120,
+        "nudge": 1440
+      }
+    }
+  },
+  "baseline": {
+    "recovery_rate": 0.21803400828956315,
+    "recovered_revenue": 1753738100,
+    "intervention_cost": 0,
+    "net_recovered_revenue": 1753738100,
+    "unnecessary_intervention_rate": 0.4507888805409467,
+    "policy_violations": 0,
+    "average_recovery_latency": 1.0
+  },
+  "revive": {
+    "recovery_rate": 0.2249420066008278,
+    "recovered_revenue": 1809302000,
+    "intervention_cost": 4230,
+    "net_recovered_revenue": 1809297770,
+    "unnecessary_intervention_rate": 0.41823190583521164,
+    "policy_violations": 0,
+    "average_recovery_latency": 20.727938011192425
+  },
+  "deltas": {
+    "Recovery Rate": {
+      "absolute_delta": 0.0069079983112646515,
+      "relative_percentage": 3.1683123038725163
+    },
+    "Recovered Revenue": {
+      "absolute_delta": 55563900,
+      "relative_percentage": 3.1683123038725105
+    },
+    "Intervention Cost": {
+      "absolute_delta": 4230,
+      "relative_percentage": null
+    },
+    "Net Recovered Revenue": {
+      "absolute_delta": 55559670,
+      "relative_percentage": 3.168071104801794
+    },
+    "Unnecessary Interventions Rate": {
+      "absolute_delta": -0.03255697470573504,
+      "relative_percentage": -7.222222222222223
+    },
+    "Policy Violations": {
+      "absolute_delta": 0,
+      "relative_percentage": null
+    },
+    "Average Recovery Latency": {
+      "absolute_delta": 19.727938011192425,
+      "relative_percentage": 1972.7938011192425
+    }
+  }
+}

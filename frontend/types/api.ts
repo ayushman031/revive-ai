@@ -122,3 +122,32 @@ export interface RecoveryCaseDetail {
   recovery_actions: RecoveryActionDetail[];
   measurement: RecoveryMeasurementDetail | null;
 }
+
+export interface EvaluationMetrics {
+  recovery_rate: number;
+  recovered_revenue: number;
+  intervention_cost: number;
+  net_recovered_revenue: number;
+  unnecessary_intervention_rate: number;
+  policy_violations: number;
+  average_recovery_latency: number;
+}
+
+export interface EvaluationDelta {
+  absolute_delta: number;
+  relative_percentage: number | null;
+}
+
+export interface EvaluationResponse {
+  metadata: {
+    dataset_size: number;
+    revenue_at_risk: number;
+    assumptions: {
+      costs: Record<string, number>;
+      latency_minutes: Record<string, number>;
+    };
+  };
+  baseline: EvaluationMetrics;
+  revive: EvaluationMetrics;
+  deltas: Record<string, EvaluationDelta>;
+}

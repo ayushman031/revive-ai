@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Home, FileText, BarChart2, Settings, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home, FileText, BarChart2, Settings, ChevronLeft, ChevronRight, Activity } from "lucide-react";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -19,6 +19,7 @@ export function Sidebar({ collapsed, onToggle, mobileMenuOpen, onMobileClose }: 
     { name: "Overview", href: "/", icon: Home },
     { name: "Recovery Cases", href: "/cases", icon: FileText },
     { name: "Analytics", href: "/analytics", icon: BarChart2 },
+    { name: "Evaluation", href: "/evaluation", icon: Activity },
   ];
 
   return (
