@@ -1,137 +1,146 @@
-# REVIVE
+# REVIVE — AI Revenue Recovery Agent
 
-REVIVE is an AI Revenue Recovery Agent for Razorpay Buildathon Track 03. It identifies revenue at risk, diagnoses the cause, predicts recovery likelihood, recommends an intervention, enforces deterministic policy controls, executes only permitted actions, measures verified recovered revenue, and preserves a complete audit trail.
+An AI-powered revenue recovery system that diagnoses failed payments, predicts recovery actions, applies deterministic policy guardrails, executes interventions, measures recovered revenue, and evaluates its performance against a baseline.
 
-## Recovery workflow
+## Core capabilities implemented
 
-```
-DETECT → DIAGNOSE → PREDICT → DECIDE → POLICY CHECK → EXECUTE → MEASURE → AUDIT
-```
+- Webhook ingestion and idempotency
+- Payment failure diagnosis
+- ML-based recovery prediction
+- Deterministic policy governance
+- Recovery execution pipeline
+- Measurement and revenue attribution
+- Merchant operations dashboard
+- Cases and case-detail views
+- Analytics dashboard
+- Evaluation dashboard
+- Baseline vs REVIVE evaluation using 10,000 synthetic transactions
 
 ## Architecture
 
-- **Backend:** Python 3.12+, FastAPI, Pydantic v2, SQLAlchemy 2.x, Alembic
-- **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS
-- **Data services:** PostgreSQL 16, Redis 7
-- **Background jobs:** Celery with Redis broker
-- **ML:** scikit-learn, XGBoost (future phases)
-- **Payments:** Razorpay REST API and webhooks (future phases)
-- **Tests:** Pytest (backend), Playwright (frontend, future phases)
-- **Local environment:** Docker Compose
-
-## Repository layout
-
-```
-backend/
-  app/
-    api/                    HTTP route handlers
-    core/                   Configuration, database, Redis
-    models/                 SQLAlchemy domain models (Phase 2+)
-    schemas/                Pydantic request/response schemas
-    repositories/           Database query and persistence layer
-    services/               Business logic orchestration
-    diagnostics/            Deterministic failure classifier
-    ml/                     ML inference (read-only, no execution)
-    policy/                 Deterministic policy gate
-    execution/              Background action workers
-    integrations/razorpay/  Razorpay API client and webhooks
-    measurement/            Recovery attribution and verification
-    audit/                  Immutable audit trail service
-    main.py                 FastAPI application factory
-  alembic/                  Database migration environment
-  tests/                    Backend test suite
-  requirements.txt          Python dependencies
-  Dockerfile                Backend container image
-  alembic.ini               Alembic configuration
-
-frontend/                   Next.js application
-data/                       Raw, processed, and generated datasets
-ml/
-  data/                     Training datasets
-  training/                 Training scripts and pipelines
-  inference/                Inference pipeline scripts
-  models/                   Serialized model artifacts
-  notebooks/                Exploratory notebooks
-  tests/                    ML evaluation tests
-docs/                       Project documentation
+```text
+Payment Webhook
+     ↓
+Diagnosis
+     ↓
+ML Prediction
+     ↓
+Policy Engine
+     ↓
+Execution
+     ↓
+Measurement
+     ↓
+Dashboard / Analytics / Evaluation
 ```
 
-## Prerequisites
+## Technology stack
 
-- Docker Desktop with Docker Compose v2
-- Python 3.12 or later (for local backend development and tests)
-- Node.js 20 or later and npm (for local frontend development)
+**Backend:**
+- Python
+- FastAPI
+- SQLAlchemy
+- PostgreSQL
+- Alembic
+- Celery
+- Redis
 
-## Quick start
+**ML:**
+- scikit-learn
+- deterministic feature schema
+- trained model artifacts
 
-1. Copy the example configuration:
+**Frontend:**
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Recharts
 
-   ```powershell
-   Copy-Item .env.example .env
-   ```
+**Infrastructure:**
+- Docker
+- Docker Compose
 
-2. Review the local-only values in `.env`. Do not commit that file.
+## Phase progression
 
-3. Start all services:
+- **Phase 1** — Project foundation
+- **Phase 2** — Domain/data model
+- **Phase 3** — Webhook ingestion and idempotency
+- **Phase 4** — Diagnosis and ML prediction
+- **Phase 5** — Policy and execution
+- **Phase 6** — Measurement + merchant dashboard
+- **Phase 7** — Evaluation framework + Evaluation Dashboard (Current completed/frozen phase)
 
-   ```powershell
-   docker compose up --build
-   ```
+## Phase 7 evaluation result
 
-4. Verify the backend is running:
+> **IMPORTANT:** The following are results from the deterministic synthetic evaluation environment, NOT live production performance.
 
-   ```powershell
-   curl http://localhost:8000/health
-   # {"status":"ok","service":"revive-api"}
-   ```
+**Dataset:**
+- 10,000 transactions
+- Revenue at Risk: INR 80,434,154
 
-To stop, press `Ctrl+C`, then run `docker compose down`.
+**Baseline:**
+- Recovery Rate: 21.80%
+- Recovered Revenue: INR 17,537,381
+- Net Recovered Revenue: INR 17,537,381
 
-## Backend development
+**REVIVE:**
+- Recovery Rate: 22.49%
+- Recovered Revenue: INR 18,093,020
+- Net Recovered Revenue: INR 18,092,977.70
 
+**Delta:**
+- Recovery Rate: +0.69 percentage points
+- Net Recovered Revenue: +INR 555,596.70
+- Unnecessary Intervention Rate: -3.26 percentage points
+
+## Evaluation assumptions
+
+- **Intervention Costs:**
+  - retry = INR 0
+  - link = INR 10
+  - nudge = INR 2
+- **Simulated Recovery Latency:**
+  - retry = 1 minute
+  - link = 120 minutes
+  - nudge = 1440 minutes
+- *Latency is simulated and not observed production latency.*
+- *Evaluation uses synthetic data.*
+
+## How to run
+
+**1. Start infrastructure and services:**
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r backend/requirements.txt
-cd backend
-python -m pytest -v
+docker compose up --build -d
 ```
 
-Run the API server locally (with `.env` in the repository root):
-
+**2. Run backend tests:**
 ```powershell
 cd backend
-uvicorn app.main:app --reload --port 8000
+uv run pytest tests/ -q
 ```
 
-## Frontend development
-
+**3. Run frontend build:**
 ```powershell
 cd frontend
 npm install
-npm run dev
+npm run build
 ```
 
-## Service URLs
+**4. Run evaluation simulator:**
+```powershell
+cd backend
+uv run python scripts/run_evaluation.py
+```
 
-When Docker Compose is running:
+## Demo routes
 
-| Service | URL |
-|---|---|
-| Backend health | http://localhost:8000/health |
-| Backend API docs | http://localhost:8000/docs |
-| Frontend | http://localhost:3000 |
+When the frontend is running (e.g., via `npm run dev` or mapped via Docker on `http://localhost:3000` or `http://localhost:3001` depending on your environment):
+- `/` (Overview)
+- `/cases`
+- `/analytics`
+- `/evaluation`
 
-## Architectural safety rules
+## Repository status
 
-1. LLMs never perform financial calculations.
-2. ML models never directly execute financial actions.
-3. Every recovery action passes through a deterministic policy gate.
-4. Monetary values use exact integer representations (paisa / minor units).
-5. Prediction, recommendation, policy evaluation, execution, and measurement are strictly separated.
-6. Policy decisions are structured and auditable.
-7. No policy bypasses for demos, tests, jobs, retries, or internal tools.
-
-## Current status
-
-**Phase 1 — Project Scaffolding** is complete. The repository contains the foundational directory structure, health endpoint, configuration, Docker Compose services, and test infrastructure. No business logic, domain models, or external integrations are implemented.
+**Phase 7 Step 3 is frozen at: v0.9.0**
